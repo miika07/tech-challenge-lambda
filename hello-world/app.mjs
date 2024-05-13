@@ -28,7 +28,7 @@ const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 
 export const lambdaHandler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const { cpf } = event;
+  const cpf = event.cpf;
 
   const queryAsync = (sql, connection) => {
     return new Promise((resolve, reject) => {
