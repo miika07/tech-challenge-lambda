@@ -16,14 +16,12 @@ lint = true
 [default.deploy.parameters]
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
-resolve_s3 = true
 s3_prefix = "lambda-tech"
 region = "us-east-1"
 disable_rollback = true
 image_repositories = []
 
 [default.package.parameters]
-resolve_s3 = true
 
 [default.sync.parameters]
 watch = true
