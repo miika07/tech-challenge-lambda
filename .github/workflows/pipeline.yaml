@@ -31,7 +31,7 @@ env:
 jobs:
 
   build-and-package:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -89,7 +89,7 @@ jobs:
           path: packaged-prod.yaml
 
   deploy-prod:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     needs: [build-and-package]
     runs-on: ubuntu-latest
     # Configure GitHub Action Environment to have a manual approval step before deployment to production
