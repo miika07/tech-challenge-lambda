@@ -165,43 +165,9 @@ jobs:
           name: packaged-prod.yaml
           path: packaged-prod.yaml
 
-  deploy-testing:
-    if: github.ref == 'refs/heads/main'
-    needs: [build-and-package]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/setup-sam@v2
-        with:
-          use-installer: true
-      - uses: actions/download-artifact@v3
-        with:
-          name: packaged-testing.yaml
-
-      - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: testing-deployment
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
-
-      - name: Deploy to testing account
-        run: |
-          sam deploy --stack-name ${TESTING_STACK_NAME} \
-            --template packaged-testing.yaml \
-            --capabilities CAPABILITY_IAM \
-            --region ${TESTING_REGION} \
-            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
-            --no-fail-on-empty-changeset \
-            --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
-
   integration-test:
     if: github.ref == 'refs/heads/main'
-    needs: [deploy-testing]
+    needs: [build-and-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
