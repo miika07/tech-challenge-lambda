@@ -29,18 +29,9 @@ env:
   PROD_REGION: us-east-1
 
 jobs:
-  test:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          # trigger the tests here
-
 
   build-and-package:
     if: github.ref == 'refs/heads/master'
-    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -99,7 +90,7 @@ jobs:
 
   deploy-prod:
     if: github.ref == 'refs/heads/master'
-    needs: [integration-test]
+    needs: [build-and-package]
     runs-on: ubuntu-latest
     # Configure GitHub Action Environment to have a manual approval step before deployment to production
     # https://docs.github.com/en/actions/reference/environments
